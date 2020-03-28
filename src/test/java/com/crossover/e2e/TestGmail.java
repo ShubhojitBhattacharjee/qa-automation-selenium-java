@@ -1,6 +1,7 @@
 package com.crossover.e2e;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -49,7 +50,7 @@ public class TestGmail {
 
         driver.findElement(By.id("identifierNext")).click();
 
-        WebDriverWait webDriverWait = new WebDriverWait( driver, 60 );
+        WebDriverWait webDriverWait = new WebDriverWait( driver, 15 );
 
         Thread.sleep( 10000 );
 
@@ -91,6 +92,29 @@ public class TestGmail {
 
         WebElement receivedEmail = webDriverWait.until( ExpectedConditions.visibilityOf( driver.findElement(
                 By.xpath( "//table//tr[contains(.,'" + emailSubject + "')]" ) ) ) );
-        receivedEmail.findElement( By.xpath( "td[3]" ) ).click();
+
+        webDriverWait.until( ExpectedConditions.elementToBeClickable(
+                receivedEmail.findElement( By.xpath( "td[3]" ) ) )).click();
+
+        webDriverWait.until( ExpectedConditions.presenceOfElementLocated(
+                By.xpath( "//table//tr[contains(.,'" + emailSubject + "')]" ) ) ).click();
+
+//        receivedEmail.findElement( By.xpath( "td[6]" ) ).click();
+
+        WebElement labelHead = webDriverWait.until( ExpectedConditions.presenceOfElementLocated(
+                By.xpath( "//div[@data-tooltip='Labels']" ) ) );
+        actions.moveToElement( labelHead ).click().perform();
+
+//        webDriverWait.until( ExpectedConditions.elementToBeClickable(
+//                By.xpath( "//div[@data-tooltip='Labels']" ) )).click();
+//        driver.findElement( By.cssSelector( "div[data-tooltip='Labels']" ) ).click();
+
+        WebElement labelInMail = webDriverWait.until( ExpectedConditions.elementToBeClickable(
+                By.cssSelector( "div[role='menuitemcheckbox'][title='Social']" )));
+
+        Assert.assertEquals( labelInMail.getAttribute( "aria-checked" ), "true" );
+        Assert.assertEquals( driver.findElement( By.cssSelector( "h2.hP" ) ).getText(), emailSubject );
+        Assert.assertTrue( driver.findElement( By.cssSelector( "div[role='listitem']" ) ).getText().contains( emailBody) );
+
     }
 }
