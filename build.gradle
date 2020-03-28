@@ -15,9 +15,7 @@ dependencies {
     compile 'com.google.apis:google-api-services-gmail:v1-rev83-1.23.0'
     testCompile 'junit:junit:4.12'
     testCompile 'org.seleniumhq.selenium:selenium-java:3.141.59'
-    // https://mvnrepository.com/artifact/com.google.guava/guava
     compile group: 'com.google.guava', name: 'guava', version: '28.2-jre'
-    // https://mvnrepository.com/artifact/javax.mail/mail
     compile group: 'javax.mail', name: 'mail', version: '1.5.0-b01'
 
 
