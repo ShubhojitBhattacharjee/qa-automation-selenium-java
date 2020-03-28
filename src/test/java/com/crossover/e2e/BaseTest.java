@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import reports.Logs;
 
 import java.io.File;
 import java.io.FileReader;
@@ -30,6 +31,11 @@ public class BaseTest {
     @After
     public void tearDown() {
         driver.quit();
+    }
+
+    public void reportLogger(String message) {
+        Logs.info( message );
+//        Reporter.log( message );
     }
 
 }

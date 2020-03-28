@@ -1,31 +1,14 @@
 package com.crossover.e2e;
 
-import java.io.File;
-import java.io.FileReader;
-import java.util.Properties;
-import junit.framework.TestCase;
+import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import util.CommonUtil;
 
-
-public class GMailTest extends TestCase {
-    private WebDriver driver;
-    private Properties properties = new Properties();
-
-    public void setUp() throws Exception {
-
-        GmailQuickstart.authorizeGmail();
-
-        properties.load(new FileReader(new File("src/test/resources/test.properties")));
-        //Dont Change below line. Set this value in test.properties file incase you need to change it..
-        System.setProperty("webdriver.chrome.driver",properties.getProperty("webdriver.chrome.driver") );
-        driver = new ChromeDriver();
-    }
-
-    public void tearDown() {
-        driver.quit();
-    }
+public class GMailTest extends BaseTest{
 
     /*
      * Please focus on completing the task
@@ -34,31 +17,85 @@ public class GMailTest extends TestCase {
     @Test
     public void testSendEmail() throws Exception {
 
+        reportLogger( "Login to Gmail" );
         driver.get("https://mail.google.com/");
 
-        WebElement userElement = driver.findElement(By.id("identifierId"));
+        WebElement userElement = driver.findElement( By.id("identifierId"));
         userElement.sendKeys(properties.getProperty("username"));
 
         driver.findElement(By.id("identifierNext")).click();
 
-        Thread.sleep(1000);
+        Thread.sleep( 10000 );
 
-        WebElement passwordElement = driver.findElement(By.name("password"));
-        passwordElement.sendKeys(properties.getProperty("password"));
+        webDriverWait.until( ExpectedConditions.elementToBeClickable(driver.findElement( By.name("password"))))
+                .sendKeys( properties.getProperty("password") );
+
         driver.findElement(By.id("passwordNext")).click();
 
-        Thread.sleep(1000);
+        reportLogger( "Compose an email from subject and body as mentioned" );
+        webDriverWait.until(ExpectedConditions.elementToBeClickable
+                ( By.xpath("//*[@role='button' and (.)='Compose']")) ).click();
 
-        WebElement composeElement = driver.findElement(By.xpath("//*[@role='button' and (.)='COMPSE']"));
-        composeElement.click();
-
-        driver.findElement(By.name("to")).clear();
+        webDriverWait.until(ExpectedConditions.elementToBeClickable
+                ( By.name("to"))).clear();
         driver.findElement(By.name("to")).sendKeys(String.format("%s@gmail.com", properties.getProperty("username")));
-        driver.findElement(By.xpath("//*[@role='button' and text()='Send']")).click();
 
         // emailSubject and emailbody to be used in this unit test.
-        String emailSubject = properties.getProperty("email.subject");
-        String emailBody = properties.getProperty("email.body");
+        String emailSubject = properties.getProperty("email.subject") + CommonUtil.getCurrentSystemDateTime();
+        String emailBody = properties.getProperty("email.body") + CommonUtil.getCurrentSystemDateTime();
 
+        driver.findElement( By.name( "subjectbox" ) ).sendKeys( emailSubject );
+        driver.findElement( By.cssSelector( "[aria-label='Message Body'][role='textbox']" ) ).sendKeys( emailBody );
+
+        driver.findElement( By.cssSelector( "div[data-tooltip='More options'][role='button']" ) ).click();
+
+        reportLogger( "Label email as 'Social'" );
+        WebElement label = webDriverWait.until( ExpectedConditions.elementToBeClickable(
+                By.xpath( "//div[@role='menuitem']/div[contains(text(),'Label')]")));
+
+        Actions actions = new Actions( driver );
+        actions.moveToElement( label ).perform();
+
+        webDriverWait.until( ExpectedConditions.elementToBeClickable(
+                By.cssSelector( "div[title='Social']" ))).click();
+
+        reportLogger( "Send the email to the same account which was used to login" );
+        driver.findElement(By.xpath("//*[@role='button' and text()='Send']")).click();
+
+        webDriverWait.until( ExpectedConditions.elementToBeClickable(
+                By.cssSelector( "[data-tooltip='Inbox']" ) )).click();
+        driver.findElement( By.cssSelector( "div[role='tab'][aria-label='Social']")).click();
+
+        reportLogger( "Wait for the email to arrive in the Inbox" );
+        WebElement receivedEmail = webDriverWait.until( ExpectedConditions.visibilityOf( driver.findElement(
+                By.xpath( "//table//tr[contains(.,'" + emailSubject + "')]" ) ) ) );
+
+        reportLogger( "Mark email as starred" );
+        webDriverWait.until( ExpectedConditions.elementToBeClickable(
+                receivedEmail.findElement( By.xpath( "td[3]" ) ) )).click();
+
+        reportLogger( "Open the received email" );
+        webDriverWait.until( ExpectedConditions.presenceOfElementLocated(
+                By.xpath( "//table//tr[contains(.,'" + emailSubject + "')]" ) ) ).click();
+
+//        receivedEmail.findElement( By.xpath( "td[6]" ) ).click();
+
+        WebElement labelHead = webDriverWait.until( ExpectedConditions.presenceOfElementLocated(
+                By.xpath( "//div[@data-tooltip='Labels']" ) ) );
+        actions.moveToElement( labelHead ).click().perform();
+
+//        webDriverWait.until( ExpectedConditions.elementToBeClickable(
+//                By.xpath( "//div[@data-tooltip='Labels']" ) )).click();
+//        driver.findElement( By.cssSelector( "div[data-tooltip='Labels']" ) ).click();
+
+        WebElement labelInMail = webDriverWait.until( ExpectedConditions.elementToBeClickable(
+                By.cssSelector( "div[role='menuitemcheckbox'][title='Social']" )));
+
+        Assert.assertEquals( labelInMail.getAttribute( "aria-checked" ), "true" );
+        reportLogger( "Verified that email came under proper Label i.e. 'Social'" );
+
+        Assert.assertEquals( driver.findElement( By.cssSelector( "h2.hP" ) ).getText(), emailSubject );
+        Assert.assertTrue( driver.findElement( By.cssSelector( "div[role='listitem']" ) ).getText().contains( emailBody) );
+        reportLogger( "Verified that subject and body of the received email" );
     }
 }
