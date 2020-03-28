@@ -1,40 +1,14 @@
 package com.crossover.e2e;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import util.CommonUtil;
 
-import java.io.File;
-import java.io.FileReader;
-import java.util.Properties;
-
-public class TestGmail {
-
-    private WebDriver driver;
-    private Properties properties = new Properties();
-
-    @Before
-    public void setUp() throws Exception {
-
-        properties.load(new FileReader(new File("src/test/resources/test.properties")));
-        //Dont Change below line. Set this value in test.properties file incase you need to change it..
-        System.setProperty("webdriver.chrome.driver", properties.getProperty("webdriver.chrome.driver") );
-        driver = new ChromeDriver();
-    }
-
-    @After
-    public void tearDown() {
-//        driver.quit();
-    }
+public class TestGmail extends BaseTest{
 
     /*
      * Please focus on completing the task
@@ -49,8 +23,6 @@ public class TestGmail {
         userElement.sendKeys(properties.getProperty("username"));
 
         driver.findElement(By.id("identifierNext")).click();
-
-        WebDriverWait webDriverWait = new WebDriverWait( driver, 15 );
 
         Thread.sleep( 10000 );
 
