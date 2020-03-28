@@ -84,5 +84,13 @@ public class TestGmail {
                 By.cssSelector( "div[title='Social']" ))).click();
 
         driver.findElement(By.xpath("//*[@role='button' and text()='Send']")).click();
+
+        webDriverWait.until( ExpectedConditions.elementToBeClickable(
+                By.cssSelector( "[data-tooltip='Inbox']" ) )).click();
+        driver.findElement( By.cssSelector( "div[role='tab'][aria-label='Social']")).click();
+
+        WebElement receivedEmail = webDriverWait.until( ExpectedConditions.visibilityOf( driver.findElement(
+                By.xpath( "//table//tr[contains(.,'" + emailSubject + "')]" ) ) ) );
+        receivedEmail.findElement( By.xpath( "td[3]" ) ).click();
     }
 }
