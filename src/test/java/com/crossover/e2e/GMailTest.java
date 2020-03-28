@@ -98,4 +98,30 @@ public class GMailTest extends BaseTest{
         Assert.assertTrue( driver.findElement( By.cssSelector( "div[role='listitem']" ) ).getText().contains( emailBody) );
         reportLogger( "Verified that subject and body of the received email" );
     }
+
+    @Test
+    public void testSendEmailPOM() throws InterruptedException {
+
+        final String userName = properties.getProperty("username");
+        final String recipient = userName + "@gmail.com";
+        final String password = properties.getProperty("password");
+        final String emailSubject = properties.getProperty("email.subject") + CommonUtil.getCurrentSystemDateTime();
+        final String emailBody = properties.getProperty("email.body") + CommonUtil.getCurrentSystemDateTime();
+
+        inboxPage = loginPage.loginToGmail(userName, password);
+        composeMailPage = inboxPage.composeNewEmail();
+
+        composeMailPage.writeEmail(recipient, emailSubject, emailBody);
+        inboxPage = composeMailPage.setLabelAndSendEmail("Social");
+
+        inboxPage.checkNewEmail(emailSubject);
+        inboxPage.starEmail(emailSubject);
+        inboxPage.readEmail(emailSubject);
+
+//        Assert.assertEquals( inboxPage.getEmailLabel(), "true" );
+        Assert.assertEquals( inboxPage.getEmailSubject(), emailSubject );
+        Assert.assertTrue( inboxPage.getEmailBody().contains(emailBody) );
+
+    }
+
 }

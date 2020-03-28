@@ -5,6 +5,9 @@ import org.junit.Before;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import pages.ComposeMailPage;
+import pages.InboxPage;
+import pages.LoginPage;
 import reports.Logs;
 
 import java.io.File;
@@ -17,6 +20,10 @@ public class BaseTest {
     protected Properties properties = new Properties();
     protected WebDriverWait webDriverWait;
 
+    protected LoginPage loginPage;
+    protected ComposeMailPage composeMailPage;
+    protected InboxPage inboxPage;
+
 
     @Before
     public void setUp() throws Exception {
@@ -25,7 +32,10 @@ public class BaseTest {
         //Dont Change below line. Set this value in test.properties file incase you need to change it..
         System.setProperty("webdriver.chrome.driver", properties.getProperty("webdriver.chrome.driver") );
         driver = new ChromeDriver();
+        driver.manage().window().maximize();
         webDriverWait = new WebDriverWait( driver, 15 );
+
+        loginPage = new LoginPage(driver);
     }
 
     @After
