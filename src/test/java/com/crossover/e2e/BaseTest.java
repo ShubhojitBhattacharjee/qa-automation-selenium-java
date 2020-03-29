@@ -47,7 +47,6 @@ public class BaseTest {
 
     public void reportLogger(String message) {
         Logs.info( message );
-//        Reporter.log( message );
     }
 
 }

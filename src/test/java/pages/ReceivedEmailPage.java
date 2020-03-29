@@ -36,7 +36,8 @@ public class ReceivedEmailPage extends BasePage {
 
         waitForElementToBeVisible( labelPlaceholder );
         Actions actions = new Actions( webDriver );
-        actions.moveToElement( labelPlaceholder ).click( labelPlaceholder ).perform();
+        labelPlaceholder.sendKeys( "" );
+        actions.moveToElement( labelPlaceholder ).doubleClick( labelPlaceholder ).perform();
 
         waitForElementToBeVisible( labelInEmail);
         return labelInEmail.getAttribute( "aria-checked" );
