@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class InboxPage extends BasePage {
 
-    @FindBy(xpath = "//*[@role='button' and (.)='Compose']")
+    @FindBy(xpath = "//div[@role='button' and normalize-space()='Compose']")
     private WebElement compose;
 
     @FindBy(css = "data-tooltip='Inbox']")

@@ -11,7 +11,7 @@ public class GMailTest extends BaseTest{
      *
      */
     @Test
-    public void testSendEmail() throws Exception {
+    public void testSendEmail() {
 
         final String userName = properties.getProperty("username");
         final String recipient = userName + "@gmail.com";
@@ -38,7 +38,9 @@ public class GMailTest extends BaseTest{
         reportLogger( "Open the received email" );
         receivedEmailPage = inboxPage.openEmail(emailSubject);
 
-//        Assert.assertEquals( inboxPage.getEmailLabel(), "true" );
+        reportLogger( "Verify email came under proper Label i.e. 'Social'" );
+        Assert.assertEquals( receivedEmailPage.getEmailLabel(), "true" );
+
         reportLogger( "Verify the subject and body of the received email" );
         Assert.assertEquals( receivedEmailPage.getEmailSubject(), emailSubject );
         Assert.assertTrue( receivedEmailPage.getEmailBody().contains(emailBody) );

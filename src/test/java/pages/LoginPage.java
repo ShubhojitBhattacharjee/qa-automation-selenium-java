@@ -23,14 +23,12 @@ public class LoginPage extends BasePage {
         driver.get("https://mail.google.com/");
     }
 
-    public InboxPage loginToGmail(String userrNameValue, String passwordValue) throws InterruptedException {
+    public InboxPage loginToGmail(String userNameValue, String passwordValue) {
 
-        userName.sendKeys( userrNameValue );
+        userName.sendKeys( userNameValue );
         userNext.click();
 
-        Thread.sleep( 1000 );
-
-        waitForElementToBeClickable( password );
+        waitForElementToBeVisible( password );
 
         password.sendKeys( passwordValue );
         passwordNext.click();

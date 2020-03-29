@@ -37,31 +37,14 @@ public class BasePage {
         wait.until( ExpectedConditions.elementToBeClickable(element));
     }
 
-    public void waitForElementAndClick(WebElement element) {
-        webDriverWait = getWebDriverWait();
-        webDriverWait.until( ExpectedConditions.elementToBeClickable(element)).click();
+    public void waitForElementToBeVisible(WebElement element) {
+        WebDriverWait wait = getWebDriverWait();
+        wait.until( ExpectedConditions.visibilityOf(element));
     }
 
     public void moveToElement(WebElement element) {
 
         actions.moveToElement( element ).perform();
-    }
-
-    public WebElement retryingGetElement(By by) {
-        WebElement element = null;
-        int attempts = 0;
-        while(attempts < 30) {
-            try {
-                element = webDriver.findElement(by);
-                break;
-            } catch(StaleElementReferenceException e) {
-                System.out.println("Found in Attempt = " + attempts);
-            } catch (WebDriverException e) {
-                System.out.println("Attempt in WebDriverException catch = " + attempts);
-            }
-            attempts++;
-        }
-        return element;
     }
 
     public void retryingGetElementClick(By by) {

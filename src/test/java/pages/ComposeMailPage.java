@@ -32,7 +32,7 @@ public class ComposeMailPage extends BasePage {
 
     public void writeEmail(String userName, String subjectValue, String body) {
 
-        waitForElementToBeClickable( recepient );
+        waitForElementToBeVisible( recepient );
         recepient.sendKeys( userName );
 
         subject.sendKeys( subjectValue );
