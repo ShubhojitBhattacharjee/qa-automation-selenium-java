@@ -1,7 +1,6 @@
 package pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -17,15 +16,6 @@ public class InboxPage extends BasePage {
 
     @FindBy(css = "div[role='tab'][aria-label='Social']")
     private WebElement socialTab;
-
-    @FindBy(xpath = "//div[@data-tooltip='Labels']")
-    private WebElement labelHead;
-
-    @FindBy(css = "h2.hP")
-    private WebElement emailSubject;
-
-    @FindBy(css = "div[role='listitem']")
-    private WebElement emailBody;
 
     WebElement receivedEmail;
 
@@ -56,31 +46,12 @@ public class InboxPage extends BasePage {
         retryingGetElementClick( By.xpath( "//table//tr[contains(.,'" + emailSubject + "')]/td[3]" ) );
     }
 
-    public void readEmail(String emailSubjectValue) {
+    public ReceivedEmailPage openEmail(String emailSubjectValue) {
 
         retryingGetElementClick(By.xpath( "//table//tr[contains(.,'" + emailSubjectValue + "')]" ) );
+        return new ReceivedEmailPage( webDriver );
 
-        waitForElementToBeClickable( emailSubject );
 
-//        JavascriptExecutor executor = (JavascriptExecutor)webDriver;
-//        executor.executeScript("arguments[0].click();", labelHead);
-
-//        moveToElement( labelHead );
-//        labelHead.click();
     }
 
-    public String getEmailLabel() {
-
-        return webDriverWait.until( ExpectedConditions.elementToBeClickable(
-                By.cssSelector( "div[role='menuitemcheckbox'][title='Social']" )))
-                .getAttribute("aria-checked");
-    }
-
-    public String getEmailSubject() {
-        return emailSubject.getText();
-    }
-
-    public String getEmailBody() {
-        return emailBody.getText();
-    }
 }

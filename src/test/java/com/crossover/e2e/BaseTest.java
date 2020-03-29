@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.ComposeMailPage;
 import pages.InboxPage;
 import pages.LoginPage;
+import pages.ReceivedEmailPage;
 import reports.Logs;
 
 import java.io.File;
@@ -21,8 +22,9 @@ public class BaseTest {
     protected WebDriverWait webDriverWait;
 
     protected LoginPage loginPage;
-    protected ComposeMailPage composeMailPage;
     protected InboxPage inboxPage;
+    protected ComposeMailPage composeMailPage;
+    protected ReceivedEmailPage receivedEmailPage;
 
 
     @Before
