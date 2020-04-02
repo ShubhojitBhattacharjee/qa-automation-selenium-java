@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
+import java.awt.*;
+
 public class ReceivedEmailPage extends BasePage {
 
     @FindBy(css = "h2.hP")
@@ -32,9 +34,11 @@ public class ReceivedEmailPage extends BasePage {
         return emailBody.getText();
     }
 
-    public String getEmailLabel() {
+    public String getEmailLabel() throws AWTException {
 
-        waitForElementToBeVisible( labelPlaceholder );
+        waitForElementToBeVisible( emailSubject );
+        moveMouse();
+
         Actions actions = new Actions( webDriver );
         labelPlaceholder.sendKeys( "" );
         actions.moveToElement( labelPlaceholder ).doubleClick( labelPlaceholder ).perform();

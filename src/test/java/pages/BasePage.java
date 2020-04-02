@@ -1,11 +1,13 @@
 package pages;
 
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.awt.*;
 import java.time.Duration;
 
 public class BasePage {
@@ -61,5 +63,17 @@ public class BasePage {
             attempts++;
         }
     }
+
+    public void moveMouse() throws AWTException {
+
+        Robot robot = new Robot();
+        Dimension i = webDriver.manage().window().getSize();
+
+        int x = (i.getWidth()/4)+50;
+        int y = (i.getHeight()/10)+120;
+
+        robot.mouseMove( x, y );
+    }
+
 
 }

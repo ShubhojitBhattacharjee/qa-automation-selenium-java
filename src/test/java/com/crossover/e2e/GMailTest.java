@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import util.CommonUtil;
 
+import java.awt.*;
+
 public class GMailTest extends BaseTest{
 
     /*
@@ -11,7 +13,7 @@ public class GMailTest extends BaseTest{
      *
      */
     @Test
-    public void testSendEmail() {
+    public void testSendEmail() throws AWTException {
 
         final String userName = properties.getProperty("username");
         final String recipient = userName + "@gmail.com";
