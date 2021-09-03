@@ -1,4 +1,4 @@
-# Project Assessment:(XO_GMAIL_1)
+# Project Assessment:(GMAIL_1)
 The provided repository contains an incomplete automated test for email sending functionality via Gmail.
 
 The test is supposed to:
